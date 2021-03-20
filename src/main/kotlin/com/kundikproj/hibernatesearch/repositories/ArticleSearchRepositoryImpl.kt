@@ -21,7 +21,10 @@ class ArticleSearchRepositoryImpl(@PersistenceContext val entityManager: EntityM
         // a very basic query by keywords
         val query = queryBuilder
                 .keyword()
-                .onFields("content")
+                .fuzzy()
+                .withEditDistanceUpTo(2)
+                .withPrefixLength(0)
+                .onFields("content", "authorName", "title", "description")
                 .matching(text)
                 .createQuery()
 
